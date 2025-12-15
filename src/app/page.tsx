@@ -1,3 +1,259 @@
-export default function Home() {
-  return <></>;
+"use client";
+
+import { Card, CardContent } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Coffee, ThermometerSun, Sparkles, Clock } from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
+import React, { useEffect, useState } from "react";
+import { recommendDrink, type RecommendDrinkOutput } from "@/ai/flows/recommend-drink";
+import Image from "next/image";
+import { Skeleton } from "@/components/ui/skeleton";
+import { useToast } from "@/hooks/use-toast";
+
+function getWeatherCondition(code: number): string {
+  if (code === 0) return "Clear sky";
+  if (code === 1) return "Mainly clear";
+  if (code === 2) return "Partly cloudy";
+  if (code === 3) return "Overcast";
+  if (code >= 45 && code <= 48) return "Fog";
+  if (code >= 51 && code <= 57) return "Drizzle";
+  if (code >= 61 && code <= 67) return "Rain";
+  if (code >= 71 && code <= 77) return "Snow";
+  if (code >= 80 && code <= 82) return "Rain showers";
+  if (code >= 85 && code <= 86) return "Snow showers";
+  if (code === 95) return "Thunderstorm";
+  if (code >= 96 && code <= 99) return "Thunderstorm with hail";
+  return "Clear";
+}
+
+export default function StarbucksPersonalizedDashboard() {
+  const { toast } = useToast();
+
+  /* -------------------- User -------------------- */
+  const user = {
+    name: "Humza",
+    taste: "Caramel & Cold Brew",
+    lastOrder: "Iced Caramel Macchiato",
+    rewards: 420,
+  };
+
+  /* -------------------- State -------------------- */
+  const [weather, setWeather] = useState<null | {
+    temp: number | string;
+    condition: string;
+  }>(null);
+
+  const [recommendation, setRecommendation] = useState<RecommendDrinkOutput | null>(null);
+  const [isLoadingRecommendation, setIsLoadingRecommendation] = useState(true);
+
+  /* -------------------- Weather (Dubai, UAE) -------------------- */
+  useEffect(() => {
+    async function fetchWeather() {
+      try {
+        const res = await fetch(
+          "https://api.open-meteo.com/v1/forecast?latitude=25.2048&longitude=55.2708&current_weather=true"
+        );
+        const data = await res.json();
+        setWeather({
+          temp: Math.round(data.current_weather.temperature),
+          condition: getWeatherCondition(data.current_weather.weathercode),
+        });
+      } catch(error) {
+        console.error("Failed to fetch weather:", error);
+        setWeather({ temp: "--", condition: "Unavailable" });
+        toast({
+          title: "Weather data unavailable",
+          description: "Could not fetch current weather. Using default recommendations.",
+          variant: "destructive",
+        })
+      }
+    }
+    fetchWeather();
+  }, [toast]);
+
+  /* -------------------- Time Logic -------------------- */
+  const [timeOfDay, setTimeOfDay] = useState("Morning");
+  useEffect(() => {
+      const hour = new Date().getHours();
+      setTimeOfDay(hour < 12 ? "Morning" : hour < 17 ? "Afternoon" : "Evening");
+  }, []);
+
+
+  /* -------------------- Recommendation Logic -------------------- */
+  useEffect(() => {
+    async function getRecommendation() {
+      if (weather && typeof weather.temp === 'number' && timeOfDay && user.taste) {
+        setIsLoadingRecommendation(true);
+        try {
+          const result = await recommendDrink({
+            temperature: weather.temp,
+            timeOfDay,
+            userTaste: user.taste,
+          });
+          setRecommendation(result);
+        } catch (error) {
+          console.error("Failed to get recommendation:", error);
+          setRecommendation({
+            title: "Made for You",
+            drink: "Caramel Latte",
+            reason: "Based on your preferences"
+          });
+          toast({
+            title: "AI recommendation failed",
+            description: "There was an issue with our AI. Here's a classic choice for you.",
+            variant: "destructive",
+          })
+        } finally {
+          setIsLoadingRecommendation(false);
+        }
+      } else if (weather) {
+        // Handle case where weather fetch failed but we still want a default
+        setRecommendation({
+          title: "Made for You",
+          drink: "Caramel Latte",
+          reason: "Based on your preferences"
+        });
+        setIsLoadingRecommendation(false);
+      }
+    }
+    getRecommendation();
+  }, [weather, timeOfDay, user.taste, toast]);
+
+  const infoCards = [
+    {
+      label: "Weather",
+      value: weather ? `${weather.temp}°C · ${weather.condition}` : "Loading…",
+      icon: ThermometerSun,
+      loading: !weather,
+    },
+    { label: "Time", value: timeOfDay, icon: Clock },
+    { label: "Taste", value: user.taste, icon: Coffee },
+    { label: "Rewards", value: `${user.rewards} ★`, icon: Sparkles },
+  ];
+
+  /* -------------------- UI -------------------- */
+  return (
+    <div className="min-h-screen bg-gradient-to-br from-[#f2fbf7] via-[#e9f6f0] to-white p-6 md:p-10 grid gap-10">
+      {/* Header */}
+      <motion.div
+        initial={{ opacity: 0, y: -12 }}
+        animate={{ opacity: 1, y: 0 }}
+        className="bg-gradient-to-r from-primary to-[#1e3932] rounded-[2.75rem] p-8 md:p-10 text-white flex items-center gap-6 shadow-2xl"
+      >
+        <Image
+          src="https://upload.wikimedia.org/wikipedia/sco/thumb/d/d3/Starbucks_Corporation_Logo_2011.svg/512px-Starbucks_Corporation_Logo_2011.svg.png"
+          alt="Starbucks"
+          width={64}
+          height={64}
+          className="h-16 w-16 rounded-full bg-white p-2 object-contain"
+        />
+        <div className="space-y-1">
+          <h1 className="text-3xl md:text-4xl font-bold tracking-tight font-headline">
+            Good {timeOfDay}, {user.name}
+          </h1>
+          <p className="text-white/80 text-lg">
+            Your Starbucks experience — personalized in real time
+          </p>
+        </div>
+      </motion.div>
+
+      {/* Quick Context */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6">
+        {infoCards.map(({ label, value, icon: Icon, loading }) => (
+          <Card key={label} className="rounded-3xl shadow-lg bg-white/90 backdrop-blur-sm border-0">
+            <CardContent className="p-6 flex items-center gap-4">
+              <Icon className="text-primary size-5" />
+              <div>
+                <p className="text-xs uppercase text-muted-foreground">{label}</p>
+                {loading ? <Skeleton className="h-5 w-32 mt-1" /> : <p className="font-medium">{value}</p>}
+              </div>
+            </CardContent>
+          </Card>
+        ))}
+      </div>
+
+      {/* Recommendation */}
+      <section className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <motion.div whileHover={{ y: -4 }} className="lg:col-span-2 transition-transform">
+          <Card className="rounded-[2.5rem] shadow-xl bg-gradient-to-br from-white to-[#f6fbf9] border-[#e3efe9] h-full">
+            <CardContent className="p-10 flex flex-col h-full gap-3">
+              <span className="inline-flex items-center gap-2 text-sm text-primary font-semibold">
+                <Sparkles size={16} /> {isLoadingRecommendation ? "Generating Recommendation..." : recommendation?.title || "AI Recommendation"}
+              </span>
+              <AnimatePresence mode="wait">
+                <motion.div
+                  key={isLoadingRecommendation ? "loading" : "loaded"}
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -10 }}
+                  transition={{ duration: 0.3 }}
+                  className="flex flex-col flex-grow"
+                >
+                  {isLoadingRecommendation ? (
+                    <div className="space-y-3 flex-grow">
+                      <Skeleton className="h-8 w-3/4" />
+                      <Skeleton className="h-5 w-full" />
+                      <Skeleton className="h-5 w-2/3" />
+                    </div>
+                  ) : (
+                    <div className="flex-grow space-y-2">
+                       <h3 className="text-2xl font-bold text-[#1e3932] font-headline">
+                        {recommendation?.drink}
+                      </h3>
+                      <p className="text-muted-foreground">{recommendation?.reason}</p>
+                    </div>
+                  )}
+                </motion.div>
+              </AnimatePresence>
+              <Button className="mt-auto w-full bg-gradient-to-r from-primary to-[#1e3932] text-white font-semibold text-lg py-6 h-auto rounded-xl">
+                Order Instantly
+              </Button>
+            </CardContent>
+          </Card>
+        </motion.div>
+
+        <motion.div whileHover={{ y: -4 }} className="transition-transform">
+          <Card className="rounded-[2.5rem] shadow-xl bg-white border-[#e3efe9] h-full">
+            <CardContent className="p-10 flex flex-col h-full gap-2">
+              <h3 className="text-lg font-semibold text-[#1e3932] font-headline">
+                Your Go-To Favorite
+              </h3>
+              <p className="text-muted-foreground">Last ordered</p>
+              <p className="text-xl font-medium">{user.lastOrder}</p>
+              <Button variant="outline" className="mt-auto w-full rounded-full border-accent text-accent hover:bg-accent hover:text-accent-foreground">
+                Reorder
+              </Button>
+            </CardContent>
+          </Card>
+        </motion.div>
+      </section>
+
+      {/* Lifestyle Section */}
+      <Card className="rounded-[2.75rem] shadow-xl bg-gradient-to-br from-white to-[#f6fbf9] border-[#e3efe9]">
+        <CardContent className="p-10 space-y-6">
+          <h2 className="text-2xl font-bold text-[#1e3932] font-headline">
+            Dubai Lifestyle Picks 🏜
+          </h2>
+          <p className="text-muted-foreground max-w-2xl">
+            Curated drinks for desert drives, beach mornings, and sunset adventures.
+          </p>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            {["Cold Brew Bottle", "Iced Matcha Latte", "Hot Chocolate"].map((item) => (
+              <motion.div
+                key={item}
+                whileHover={{ y: -4, boxShadow: '0 10px 15px -3px rgb(0 0 0 / 0.05), 0 4px 6px -4px rgb(0 0 0 / 0.05)' }}
+                className="rounded-2xl border border-[#e3efe9] p-6 transition-shadow bg-white"
+              >
+                <p className="font-semibold text-[#1e3932]">{item}</p>
+                <p className="text-sm text-muted-foreground mt-1">
+                  Perfectly suited for Dubai’s rhythm.
+                </p>
+              </motion.div>
+            ))}
+          </div>
+        </CardContent>
+      </Card>
+    </div>
+  );
 }
