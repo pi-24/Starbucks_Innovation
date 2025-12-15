@@ -28,6 +28,27 @@ function getWeatherCondition(code: number): string {
   return "Clear";
 }
 
+const MetaIcon = () => (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    viewBox="0 0 100 100"
+    className="size-16"
+  >
+    <defs>
+      <linearGradient id="meta-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+        <stop offset="0%" stopColor="#405DE6" />
+        <stop offset="50%" stopColor="#C13584" />
+        <stop offset="100%" stopColor="#72f" />
+      </linearGradient>
+    </defs>
+    <path
+      d="M50,10A40,40,0,1,1,10,50,40,40,0,0,1,50,10m0-8A48,48,0,1,0,98,50,48,48,0,0,0,50,2Z"
+      fill="url(#meta-gradient)"
+    />
+  </svg>
+);
+
+
 export default function StarbucksPersonalizedDashboard() {
   const { toast } = useToast();
 
@@ -288,6 +309,17 @@ export default function StarbucksPersonalizedDashboard() {
           </Link>
         </CardContent>
       </Card>
+
+      {/* Floating Meta Icon */}
+      <Link
+        href="https://aistudio.instagram.com/ai/838932582365222/?utm_source=mshare"
+        target="_blank"
+        rel="noopener noreferrer"
+        className="fixed bottom-8 right-8 z-50 transition-transform hover:scale-110"
+        aria-label="Talk to our Meta expert"
+      >
+        <MetaIcon />
+      </Link>
     </div>
   );
 }
