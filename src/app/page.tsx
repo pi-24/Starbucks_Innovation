@@ -2,7 +2,7 @@
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Coffee, ThermometerSun, Sparkles, Clock, MessageCircle } from "lucide-react";
+import { Coffee, ThermometerSun, Sparkles, Clock, MessageCircle, ShoppingCart } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import React, { useEffect, useState } from "react";
 import { recommendDrink, type RecommendDrinkOutput } from "@/ai/flows/recommend-drink";
@@ -231,7 +231,8 @@ export default function StarbucksPersonalizedDashboard() {
                 </motion.div>
               </AnimatePresence>
               <Button className="mt-auto w-full bg-gradient-to-r from-primary to-[#1e3932] text-white font-semibold text-lg py-6 h-auto rounded-xl">
-                Order Instantly
+                <ShoppingCart className="mr-2"/>
+                Add to Cart
               </Button>
             </CardContent>
           </Card>
@@ -246,7 +247,8 @@ export default function StarbucksPersonalizedDashboard() {
               <p className="text-muted-foreground">Last ordered</p>
               <p className="text-xl font-medium">{user.lastOrder}</p>
               <Button variant="outline" className="mt-auto w-full rounded-full border-accent text-accent hover:bg-accent hover:text-accent-foreground">
-                Reorder
+                <ShoppingCart className="mr-2"/>
+                Add to Cart
               </Button>
             </CardContent>
           </Card>
@@ -260,8 +262,12 @@ export default function StarbucksPersonalizedDashboard() {
             Customize Your Drink
           </CardTitle>
         </CardHeader>
-        <CardContent className="p-10">
+        <CardContent className="p-10 flex flex-col items-center gap-6">
           <DrinkCustomizer />
+          <Button className="w-full max-w-sm bg-gradient-to-r from-primary to-[#1e3932] text-white font-semibold text-lg py-6 h-auto rounded-xl">
+            <ShoppingCart className="mr-2"/>
+            Add Customized Drink to Cart
+          </Button>
         </CardContent>
       </Card>
 
@@ -292,12 +298,18 @@ export default function StarbucksPersonalizedDashboard() {
               <motion.div
                 key={item}
                 whileHover={{ y: -4, boxShadow: '0 10px 15px -3px rgb(0 0 0 / 0.05), 0 4px 6px -4px rgb(0 0 0 / 0.05)' }}
-                className="rounded-2xl border border-[#e3efe9] p-6 transition-shadow bg-white"
+                className="rounded-2xl border border-[#e3efe9] p-6 transition-shadow bg-white flex flex-col"
               >
-                <p className="font-semibold text-[#1e3932]">{item}</p>
-                <p className="text-sm text-muted-foreground mt-1">
-                  Perfectly suited for Dubai’s rhythm.
-                </p>
+                <div className="flex-grow">
+                  <p className="font-semibold text-[#1e3932]">{item}</p>
+                  <p className="text-sm text-muted-foreground mt-1">
+                    Perfectly suited for Dubai’s rhythm.
+                  </p>
+                </div>
+                <Button variant="outline" className="w-full mt-4 rounded-full border-accent text-accent hover:bg-accent hover:text-accent-foreground">
+                  <ShoppingCart className="mr-2"/>
+                  Add to Cart
+                </Button>
               </motion.div>
             ))}
           </div>
@@ -337,3 +349,5 @@ export default function StarbucksPersonalizedDashboard() {
     </div>
   );
 }
+
+    

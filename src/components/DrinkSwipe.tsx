@@ -5,6 +5,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import Image from "next/image";
+import { ShoppingCart } from "lucide-react";
 
 // --- Demo Drink Data (1 per Starbucks category)
 const DRINKS = [
@@ -164,6 +165,10 @@ export default function DrinkSwipe() {
                 <p className="text-xs text-neutral-500">
                   Matched because you liked {recommendedDrink.category} drinks
                 </p>
+                <Button className="w-full">
+                  <ShoppingCart className="mr-2"/>
+                  Add to Cart
+                </Button>
               </>
             ) : (
               <p>No strong preference detected</p>
@@ -174,3 +179,5 @@ export default function DrinkSwipe() {
     </div>
   );
 }
+
+    
