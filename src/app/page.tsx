@@ -346,7 +346,7 @@ export default function StarbucksPersonalizedDashboard() {
               {language === 'ar' ? 'تحدث مع خبير المشروبات الذكي على ميتا للعثور على توصية المشروب المثالية لك.' : 'Chat with our AI beverage expert on Meta to find your perfect drink recommendation.'}
             </p>
           </div>
-          <Link href="https://aistudio.instagram.com/ai/838932582365222/?utm_source=mshare" target="_blank" rel="noopener noreferrer" className="shrink-0">
+          <Link href="https://aistudio.instagram.com/ai/3269153556625381/?utm_source=share" target="_blank" rel="noopener noreferrer" className="shrink-0">
             <Button size="lg" className="bg-accent text-accent-foreground hover:bg-accent/90 rounded-full font-bold py-6 px-8 text-base">
               {language === 'ar' ? 'تحدث إلى خبيرنا في ميتا' : 'Talk to our Meta expert'}
               <MessageCircle className="ml-2"/>
@@ -357,7 +357,7 @@ export default function StarbucksPersonalizedDashboard() {
 
       {/* Floating Meta Icon */}
       <Link
-        href="https://aistudio.instagram.com/ai/838932582365222/?utm_source=mshare"
+        href="https://aistudio.instagram.com/ai/3269153556625381/?utm_source=share"
         target="_blank"
         rel="noopener noreferrer"
         className="fixed bottom-8 right-8 z-50 transition-transform hover:scale-110"
