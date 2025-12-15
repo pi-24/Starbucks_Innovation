@@ -11,6 +11,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { useToast } from "@/hooks/use-toast";
 import DrinkSwipe from "@/components/DrinkSwipe";
 import Link from "next/link";
+import DrinkCustomizer from "@/components/DrinkCustomizer";
 
 function getWeatherCondition(code: number): string {
   if (code === 0) return "Clear sky";
@@ -251,6 +252,18 @@ export default function StarbucksPersonalizedDashboard() {
           </Card>
         </motion.div>
       </section>
+
+      {/* Customize Your Drink Section */}
+      <Card className="rounded-[2.75rem] shadow-xl bg-gradient-to-br from-white to-[#f6fbf9] border-[#e3efe9]">
+        <CardHeader>
+          <CardTitle className="text-2xl font-bold text-[#1e3932] font-headline">
+            Customize Your Drink
+          </CardTitle>
+        </CardHeader>
+        <CardContent className="p-10">
+          <DrinkCustomizer />
+        </CardContent>
+      </Card>
 
       {/* My Taste Section */}
       <Card className="rounded-[2.75rem] shadow-xl bg-gradient-to-br from-white to-[#f6fbf9] border-[#e3efe9]">
