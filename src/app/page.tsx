@@ -2,7 +2,7 @@
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Coffee, ThermometerSun, Sparkles, Clock } from "lucide-react";
+import { Coffee, ThermometerSun, Sparkles, Clock, MessageCircle } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import React, { useEffect, useState } from "react";
 import { recommendDrink, type RecommendDrinkOutput } from "@/ai/flows/recommend-drink";
@@ -10,6 +10,7 @@ import Image from "next/image";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useToast } from "@/hooks/use-toast";
 import DrinkSwipe from "@/components/DrinkSwipe";
+import Link from "next/link";
 
 function getWeatherCondition(code: number): string {
   if (code === 0) return "Clear sky";
@@ -265,6 +266,26 @@ export default function StarbucksPersonalizedDashboard() {
               </motion.div>
             ))}
           </div>
+        </CardContent>
+      </Card>
+
+      {/* Meta AI Expert Section */}
+      <Card className="rounded-[2.75rem] shadow-xl bg-gradient-to-br from-accent/10 to-transparent border-accent/20">
+        <CardContent className="p-10 flex flex-col md:flex-row items-center justify-between gap-6 text-center md:text-left">
+          <div className="space-y-2">
+            <h2 className="text-2xl font-bold text-accent font-headline">
+              Can't decide?
+            </h2>
+            <p className="text-muted-foreground max-w-md">
+              Chat with our AI beverage expert on Meta to find your perfect drink recommendation.
+            </p>
+          </div>
+          <Link href="https://aistudio.instagram.com/ai/838932582365222/?utm_source=mshare" target="_blank" rel="noopener noreferrer" className="shrink-0">
+            <Button size="lg" className="bg-accent text-accent-foreground hover:bg-accent/90 rounded-full font-bold py-6 px-8 text-base">
+              Talk to our Meta expert
+              <MessageCircle className="ml-2"/>
+            </Button>
+          </Link>
         </CardContent>
       </Card>
     </div>
