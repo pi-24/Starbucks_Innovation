@@ -36,14 +36,15 @@ const MetaIcon = () => (
   >
     <defs>
       <linearGradient id="meta-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
-        <stop offset="0%" stopColor="#405DE6" />
-        <stop offset="50%" stopColor="#C13584" />
-        <stop offset="100%" stopColor="#72f" />
+        <stop offset="0%" stopColor="#0062E0" />
+        <stop offset="50%" stopColor="#833AB4" />
+        <stop offset="100%" stopColor="#C13584" />
       </linearGradient>
     </defs>
     <path
-      d="M50,10A40,40,0,1,1,10,50,40,40,0,0,1,50,10m0-8A48,48,0,1,0,98,50,48,48,0,0,0,50,2Z"
+      d="M50,2 A48,48 0 1,0 50,98 A48,48 0 1,0 50,2 M50,15 A35,35 0 1,1 50,85 A35,35 0 1,1 50,15"
       fill="url(#meta-gradient)"
+      fillRule="evenodd"
     />
   </svg>
 );
