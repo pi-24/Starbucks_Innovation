@@ -33,7 +33,19 @@ const nextConfig: NextConfig = {
         hostname: 'upload.wikimedia.org',
         port: '',
         pathname: '/**',
-      }
+      },
+      {
+        protocol: 'https',
+        hostname: 'cloudassets.starbucks.com',
+        port: '',
+        pathname: '/**',
+      },
+      {
+        protocol: 'https',
+        hostname: 'bunny-wp-pullzone-8lgzf5kyx3.b-cdn.net',
+        port: '',
+        pathname: '/**',
+      },
     ],
   },
 };

@@ -1,6 +1,6 @@
 "use client";
 
-import { Card, CardContent } from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Coffee, ThermometerSun, Sparkles, Clock } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
@@ -9,6 +9,7 @@ import { recommendDrink, type RecommendDrinkOutput } from "@/ai/flows/recommend-
 import Image from "next/image";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useToast } from "@/hooks/use-toast";
+import DrinkSwipe from "@/components/DrinkSwipe";
 
 function getWeatherCondition(code: number): string {
   if (code === 0) return "Clear sky";
@@ -227,6 +228,18 @@ export default function StarbucksPersonalizedDashboard() {
           </Card>
         </motion.div>
       </section>
+
+      {/* My Taste Section */}
+      <Card className="rounded-[2.75rem] shadow-xl bg-gradient-to-br from-white to-[#f6fbf9] border-[#e3efe9]">
+        <CardHeader>
+          <CardTitle className="text-2xl font-bold text-[#1e3932] font-headline">
+            Discover Your Taste
+          </CardTitle>
+        </CardHeader>
+        <CardContent className="p-10">
+          <DrinkSwipe />
+        </CardContent>
+      </Card>
 
       {/* Lifestyle Section */}
       <Card className="rounded-[2.75rem] shadow-xl bg-gradient-to-br from-white to-[#f6fbf9] border-[#e3efe9]">
