@@ -11,56 +11,56 @@ import { ShoppingCart } from "lucide-react";
 const DRINKS = [
   {
     id: 1,
-    name: "Pike Place Roast",
+    name: { en: "Pike Place Roast", ar: "قهوة بايك بليس" },
     category: "coffee",
-    description: "Smooth, well-rounded brewed coffee.",
+    description: { en: "Smooth, well-rounded brewed coffee.", ar: "قهوة مخمرة ناعمة ومتوازنة." },
     image: "https://cloudassets.starbucks.com/is/image/sbuxcorp/BrewedCoffee"
   },
   {
     id: 2,
-    name: "Caffè Latte",
+    name: { en: "Caffè Latte", ar: "كافيه لاتيه" },
     category: "espresso",
-    description: "Rich espresso with steamed milk.",
+    description: { en: "Rich espresso with steamed milk.", ar: "اسبريسو غني مع حليب مبخر." },
     image: "https://bunny-wp-pullzone-8lgzf5kyx3.b-cdn.net/assets/uploads/2023/08/sbx20190617-35529-caffelatte-onwhite-corelib-srgb.png"
   },
   {
     id: 3,
-    name: "Caramel Frappuccino",
+    name: { en: "Caramel Frappuccino", ar: "فرابوتشينو كراميل" },
     category: "frappuccino",
-    description: "Blended coffee with caramel sweetness.",
+    description: { en: "Blended coffee with caramel sweetness.", ar: "قهوة ممزوجة بحلاوة الكراميل." },
     image: "https://cloudassets.starbucks.com/is/image/sbuxcorp/SBX20220323_CaramelFrapp?impolicy=1by1_wide_topcrop_630&crop=180,360,1440,1440&wid=630&hei=630&qlt=85"
   },
   {
     id: 4,
-    name: "Dragon Drink",
+    name: { en: "Dragon Drink", ar: "مشروب التنين" },
     category: "refreshers",
-    description: "Tropical mango & dragonfruit refresher.",
+    description: { en: "Tropical mango & dragonfruit refresher.", ar: "منعش المانجو وفاكهة التنين الاستوائية." },
     image: "https://cloudassets.starbucks.com/is/image/sbuxcorp/DragonDrink?impolicy=1by1_wide_topcrop_630&crop=180,360,1440,1440&wid=630&hei=630&qlt=85"
   },
   {
     id: 5,
-    name: "Matcha Green Tea Latte",
+    name: { en: "Matcha Green Tea Latte", ar: "لاتيه شاي الماتشا الأخضر" },
     category: "tea",
-    description: "Creamy green tea with subtle sweetness.",
+    description: { en: "Creamy green tea with subtle sweetness.", ar: "شاي أخضر كريمي مع حلاوة خفيفة." },
     image: "https://cloudassets.starbucks.com/is/image/sbuxcorp/IcedMatchaTeaLatte?impolicy=1by1_wide_topcrop_630&crop=180,360,1440,1440&wid=630&hei=630&qlt=85"
   },
   {
     id: 6,
-    name: "Pumpkin Spice Latte",
+    name: { en: "Pumpkin Spice Latte", ar: "لاتيه اليقطين بالتوابل" },
     category: "seasonal",
-    description: "Classic fall flavors with warm spices.",
+    description: { en: "Classic fall flavors with warm spices.", ar: "نكهات الخريف الكلاسيكية مع التوابل الدافئة." },
     image: "https://cloudassets.starbucks.com/is/image/sbuxcorp/PumpkinSpiceLatte-2?impolicy=1by1_wide_topcrop_630&crop=180,360,1440,1440&wid=630&hei=630&qlt=85"
   },
   {
     id: 7,
-    name: "Iced Caffè Latte with Protein",
+    name: { en: "Iced Caffè Latte with Protein", ar: "كافيه لاتيه مثلج بالبروتين" },
     category: "protein",
-    description: "Chilled latte with added protein for energy.",
+    description: { en: "Chilled latte with added protein for energy.", ar: "لاتيه مثلج مع بروتين مضاف للطاقة." },
     image: "https://cloudassets.starbucks.com/is/image/sbuxcorp/IcedCaffeLattewProtein?impolicy=1by1_wide_topcrop_630&crop=180,360,1440,1440&wid=630&hei=630&qlt=85"
   }
 ];
 
-export default function DrinkSwipe() {
+export default function DrinkSwipe({ language }: { language: 'en' | 'ar' }) {
   const [index, setIndex] = useState(0);
   const [prefs, setPrefs] = useState<{ [key: string]: number }>({});
   const [finished, setFinished] = useState(false);
@@ -93,6 +93,16 @@ export default function DrinkSwipe() {
     protein: "💪"
   };
 
+  const categoryTranslations: { [key: string]: string } = {
+    coffee: "قهوة",
+    espresso: "اسبريسو",
+    frappuccino: "فرابوتشينو",
+    refreshers: "منعشات",
+    tea: "شاي",
+    seasonal: "موسمي",
+    protein: "بروتين"
+  };
+
   return (
     <div className="flex items-center justify-center">
       {!finished && drink && (
@@ -115,25 +125,25 @@ export default function DrinkSwipe() {
                 <div className="relative w-full h-72">
                   <Image
                     src={drink.image}
-                    alt={drink.name}
+                    alt={drink.name[language]}
                     fill
                     className="object-cover"
                   />
                 </div>
 
                 <div className="p-6 space-y-3">
-                  <h2 className="text-xl font-semibold">{drink.name}</h2>
-                  <p className="text-sm text-neutral-600">{drink.description}</p>
+                  <h2 className="text-xl font-semibold">{drink.name[language]}</h2>
+                  <p className="text-sm text-neutral-600">{drink.description[language]}</p>
 
                   <span className="text-xs uppercase tracking-wide text-neutral-400">
-                    {drink.category}
+                    {language === 'ar' ? categoryTranslations[drink.category] : drink.category}
                   </span>
 
                   <div className="flex justify-between pt-4">
                     <Button variant="outline" onClick={() => swipe(false)}>
-                      Pass
+                      {language === 'ar' ? 'تخطي' : 'Pass'}
                     </Button>
-                    <Button onClick={() => swipe(true)}>Like</Button>
+                    <Button onClick={() => swipe(true)}>{language === 'ar' ? 'أعجبني' : 'Like'}</Button>
                   </div>
                 </div>
               </CardContent>
@@ -145,33 +155,33 @@ export default function DrinkSwipe() {
       {finished && (
         <Card className="rounded-3xl shadow-2xl w-[420px] max-w-full bg-white">
           <CardContent className="p-6 text-center space-y-4">
-            <h2 className="text-xl font-semibold">Your Starbucks Match Today</h2>
+            <h2 className="text-xl font-semibold">{language === 'ar' ? 'مشروبك المثالي اليوم' : 'Your Starbucks Match Today'}</h2>
             {recommendedDrink ? (
               <>
                 <div className="relative w-full h-56">
                   <Image
                     src={recommendedDrink.image}
-                    alt={recommendedDrink.name}
+                    alt={recommendedDrink.name[language]}
                     fill
                     className="object-cover rounded-xl"
                   />
                 </div>
                 <p className="text-lg font-medium">
-                  {emojiMap[recommendedDrink.category]} {recommendedDrink.name}
+                  {emojiMap[recommendedDrink.category]} {recommendedDrink.name[language]}
                 </p>
                 <p className="text-sm text-neutral-600">
-                  {recommendedDrink.description}
+                  {recommendedDrink.description[language]}
                 </p>
                 <p className="text-xs text-neutral-500">
-                  Matched because you liked {recommendedDrink.category} drinks
+                  {language === 'ar' ? `تمت المطابقة لأنك أحببت مشروبات ${categoryTranslations[recommendedDrink.category]}` : `Matched because you liked ${recommendedDrink.category} drinks`}
                 </p>
                 <Button className="w-full">
                   <ShoppingCart className="mr-2"/>
-                  Add to Cart
+                  {language === 'ar' ? 'أضف إلى السلة' : 'Add to Cart'}
                 </Button>
               </>
             ) : (
-              <p>No strong preference detected</p>
+              <p>{language === 'ar' ? 'لم يتم الكشف عن تفضيل قوي' : 'No strong preference detected'}</p>
             )}
           </CardContent>
         </Card>
@@ -179,5 +189,3 @@ export default function DrinkSwipe() {
     </div>
   );
 }
-
-    

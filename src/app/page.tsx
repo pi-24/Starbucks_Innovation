@@ -2,7 +2,7 @@
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Coffee, ThermometerSun, Sparkles, Clock, MessageCircle, ShoppingCart } from "lucide-react";
+import { Coffee, ThermometerSun, Sparkles, Clock, MessageCircle, ShoppingCart, Languages } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import React, { useEffect, useState } from "react";
 import { recommendDrink, type RecommendDrinkOutput } from "@/ai/flows/recommend-drink";
@@ -53,6 +53,16 @@ const MetaIcon = () => (
 
 export default function StarbucksPersonalizedDashboard() {
   const { toast } = useToast();
+  const [language, setLanguage] = useState<'en' | 'ar'>('en');
+
+  const toggleLanguage = () => {
+    setLanguage(prev => prev === 'en' ? 'ar' : 'en');
+  };
+
+  useEffect(() => {
+    document.documentElement.dir = language === 'ar' ? 'rtl' : 'ltr';
+    document.documentElement.lang = language;
+  }, [language]);
 
   /* -------------------- User -------------------- */
   const user = {
@@ -146,14 +156,14 @@ export default function StarbucksPersonalizedDashboard() {
 
   const infoCards = [
     {
-      label: "Weather",
+      label: language === 'ar' ? 'الطقس' : 'Weather',
       value: weather ? `${weather.temp}°C · ${weather.condition}` : "Loading…",
       icon: ThermometerSun,
       loading: !weather,
     },
-    { label: "Time", value: timeOfDay, icon: Clock },
-    { label: "Taste", value: user.taste, icon: Coffee },
-    { label: "Rewards", value: `${user.rewards} ★`, icon: Sparkles },
+    { label: language === 'ar' ? 'الوقت' : 'Time', value: language === 'ar' ? (timeOfDay === 'Morning' ? 'الصباح' : timeOfDay === 'Afternoon' ? 'بعد الظهر' : 'المساء') : timeOfDay, icon: Clock },
+    { label: language === 'ar' ? 'ذوقك' : 'Taste', value: user.taste, icon: Coffee },
+    { label: language === 'ar' ? 'المكافآت' : 'Rewards', value: `${user.rewards} ★`, icon: Sparkles },
   ];
 
   /* -------------------- UI -------------------- */
@@ -163,23 +173,28 @@ export default function StarbucksPersonalizedDashboard() {
       <motion.div
         initial={{ opacity: 0, y: -12 }}
         animate={{ opacity: 1, y: 0 }}
-        className="bg-gradient-to-r from-primary to-[#1e3932] rounded-[2.75rem] p-8 md:p-10 text-white flex items-center gap-6 shadow-2xl"
+        className="bg-gradient-to-r from-primary to-[#1e3932] rounded-[2.75rem] p-8 md:p-10 text-white flex items-center justify-between gap-6 shadow-2xl"
       >
-        <Image
-          src="https://upload.wikimedia.org/wikipedia/sco/thumb/d/d3/Starbucks_Corporation_Logo_2011.svg/512px-Starbucks_Corporation_Logo_2011.svg.png"
-          alt="Starbucks"
-          width={64}
-          height={64}
-          className="h-16 w-16 rounded-full bg-white p-2 object-contain"
-        />
-        <div className="space-y-1">
-          <h1 className="text-3xl md:text-4xl font-bold tracking-tight font-headline">
-            Good {timeOfDay}, {user.name}
-          </h1>
-          <p className="text-white/80 text-lg">
-            Your Starbucks experience — personalized in real time
-          </p>
+        <div className="flex items-center gap-6">
+          <Image
+            src="https://upload.wikimedia.org/wikipedia/sco/thumb/d/d3/Starbucks_Corporation_Logo_2011.svg/512px-Starbucks_Corporation_Logo_2011.svg.png"
+            alt="Starbucks"
+            width={64}
+            height={64}
+            className="h-16 w-16 rounded-full bg-white p-2 object-contain"
+          />
+          <div className="space-y-1">
+            <h1 className="text-3xl md:text-4xl font-bold tracking-tight font-headline">
+              {language === 'ar' ? `مساء الخير، ${user.name}` : `Good ${timeOfDay}, ${user.name}`}
+            </h1>
+            <p className="text-white/80 text-lg">
+              {language === 'ar' ? 'تجربة ستاربكس الخاصة بك - مخصصة في الوقت الفعلي' : 'Your Starbucks experience — personalized in real time'}
+            </p>
+          </div>
         </div>
+        <Button onClick={toggleLanguage} variant="ghost" size="icon" className="text-white hover:bg-white/10">
+          <Languages className="size-6"/>
+        </Button>
       </motion.div>
 
       {/* Quick Context */}
@@ -203,7 +218,7 @@ export default function StarbucksPersonalizedDashboard() {
           <Card className="rounded-[2.5rem] shadow-xl bg-gradient-to-br from-white to-[#f6fbf9] border-[#e3efe9] h-full">
             <CardContent className="p-10 flex flex-col h-full gap-3">
               <span className="inline-flex items-center gap-2 text-sm text-primary font-semibold">
-                <Sparkles size={16} /> {isLoadingRecommendation ? "Generating Recommendation..." : recommendation?.title || "AI Recommendation"}
+                <Sparkles size={16} /> {isLoadingRecommendation ? (language === 'ar' ? "جارٍ إنشاء التوصية..." : "Generating Recommendation...") : recommendation?.title || (language === 'ar' ? 'توصية الذكاء الاصطناعي' : "AI Recommendation")}
               </span>
               <AnimatePresence mode="wait">
                 <motion.div
@@ -232,7 +247,7 @@ export default function StarbucksPersonalizedDashboard() {
               </AnimatePresence>
               <Button className="mt-auto w-full bg-gradient-to-r from-primary to-[#1e3932] text-white font-semibold text-lg py-6 h-auto rounded-xl">
                 <ShoppingCart className="mr-2"/>
-                Add to Cart
+                {language === 'ar' ? 'أضف إلى السلة' : 'Add to Cart'}
               </Button>
             </CardContent>
           </Card>
@@ -242,13 +257,13 @@ export default function StarbucksPersonalizedDashboard() {
           <Card className="rounded-[2.5rem] shadow-xl bg-white border-[#e3efe9] h-full">
             <CardContent className="p-10 flex flex-col h-full gap-2">
               <h3 className="text-lg font-semibold text-[#1e3932] font-headline">
-                Your Go-To Favorite
+                {language === 'ar' ? 'مشروبك المفضل' : 'Your Go-To Favorite'}
               </h3>
-              <p className="text-muted-foreground">Last ordered</p>
+              <p className="text-muted-foreground">{language === 'ar' ? 'آخر طلب' : 'Last ordered'}</p>
               <p className="text-xl font-medium">{user.lastOrder}</p>
               <Button variant="outline" className="mt-auto w-full rounded-full border-accent text-accent hover:bg-accent hover:text-accent-foreground">
                 <ShoppingCart className="mr-2"/>
-                Add to Cart
+                {language === 'ar' ? 'أضف إلى السلة' : 'Add to Cart'}
               </Button>
             </CardContent>
           </Card>
@@ -259,11 +274,11 @@ export default function StarbucksPersonalizedDashboard() {
       <Card className="rounded-[2.75rem] shadow-xl bg-gradient-to-br from-white to-[#f6fbf9] border-[#e3efe9]">
         <CardHeader>
           <CardTitle className="text-2xl font-bold text-[#1e3932] font-headline">
-            Discover Your Taste
+            {language === 'ar' ? 'اكتشف ذوقك' : 'Discover Your Taste'}
           </CardTitle>
         </CardHeader>
         <CardContent className="p-10">
-          <DrinkSwipe />
+          <DrinkSwipe language={language} />
         </CardContent>
       </Card>
 
@@ -271,14 +286,14 @@ export default function StarbucksPersonalizedDashboard() {
       <Card className="rounded-[2.75rem] shadow-xl bg-gradient-to-br from-white to-[#f6fbf9] border-[#e3efe9]">
         <CardHeader>
           <CardTitle className="text-2xl font-bold text-[#1e3932] font-headline">
-            Customize Your Drink
+            {language === 'ar' ? 'خصص مشروبك' : 'Customize Your Drink'}
           </CardTitle>
         </CardHeader>
         <CardContent className="p-10 flex flex-col items-center gap-6">
-          <DrinkCustomizer />
+          <DrinkCustomizer language={language} />
           <Button className="w-full max-w-sm bg-gradient-to-r from-primary to-[#1e3932] text-white font-semibold text-lg py-6 h-auto rounded-xl">
             <ShoppingCart className="mr-2"/>
-            Add Customized Drink to Cart
+            {language === 'ar' ? 'أضف المشروب المخصص إلى السلة' : 'Add Customized Drink to Cart'}
           </Button>
         </CardContent>
       </Card>
@@ -287,28 +302,32 @@ export default function StarbucksPersonalizedDashboard() {
       <Card className="rounded-[2.75rem] shadow-xl bg-gradient-to-br from-white to-[#f6fbf9] border-[#e3efe9]">
         <CardContent className="p-10 space-y-6">
           <h2 className="text-2xl font-bold text-[#1e3932] font-headline">
-            Dubai Lifestyle Picks 🏜
+            {language === 'ar' ? 'مختارات لأسلوب حياة دبي 🏜' : 'Dubai Lifestyle Picks 🏜'}
           </h2>
           <p className="text-muted-foreground max-w-2xl">
-            Curated drinks for desert drives, beach mornings, and sunset adventures.
+            {language === 'ar' ? 'مشروبات منسقة للقيادة في الصحراء، صباحات الشاطئ، ومغامرات غروب الشمس.' : 'Curated drinks for desert drives, beach mornings, and sunset adventures.'}
           </p>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            {["Cold Brew Bottle", "Iced Matcha Latte", "Hot Chocolate"].map((item) => (
+            {[
+              { en: "Cold Brew Bottle", ar: "زجاجة كولد برو" },
+              { en: "Iced Matcha Latte", ar: "شاي ماتشا مثلج" },
+              { en: "Hot Chocolate", ar: "شوكولاتة ساخنة" }
+            ].map((item) => (
               <motion.div
-                key={item}
+                key={item.en}
                 whileHover={{ y: -4, boxShadow: '0 10px 15px -3px rgb(0 0 0 / 0.05), 0 4px 6px -4px rgb(0 0 0 / 0.05)' }}
                 className="rounded-2xl border border-[#e3efe9] p-6 transition-shadow bg-white flex flex-col"
               >
                 <div className="flex-grow">
-                  <p className="font-semibold text-[#1e3932]">{item}</p>
+                  <p className="font-semibold text-[#1e3932]">{language === 'ar' ? item.ar : item.en}</p>
                   <p className="text-sm text-muted-foreground mt-1">
-                    Perfectly suited for Dubai’s rhythm.
+                    {language === 'ar' ? 'مناسب تمامًا لإيقاع دبي.' : 'Perfectly suited for Dubai’s rhythm.'}
                   </p>
                 </div>
                 <Button variant="outline" className="w-full mt-4 rounded-full border-accent text-accent hover:bg-accent hover:text-accent-foreground">
                   <ShoppingCart className="mr-2"/>
-                  Add to Cart
+                  {language === 'ar' ? 'أضف إلى السلة' : 'Add to Cart'}
                 </Button>
               </motion.div>
             ))}
@@ -321,15 +340,15 @@ export default function StarbucksPersonalizedDashboard() {
         <CardContent className="p-10 flex flex-col md:flex-row items-center justify-between gap-6 text-center md:text-left">
           <div className="space-y-2">
             <h2 className="text-2xl font-bold text-accent font-headline">
-              Can't decide?
+              {language === 'ar' ? 'محتار؟' : "Can't decide?"}
             </h2>
             <p className="text-muted-foreground max-w-md">
-              Chat with our AI beverage expert on Meta to find your perfect drink recommendation.
+              {language === 'ar' ? 'تحدث مع خبير المشروبات الذكي على ميتا للعثور على توصية المشروب المثالية لك.' : 'Chat with our AI beverage expert on Meta to find your perfect drink recommendation.'}
             </p>
           </div>
           <Link href="https://aistudio.instagram.com/ai/838932582365222/?utm_source=mshare" target="_blank" rel="noopener noreferrer" className="shrink-0">
             <Button size="lg" className="bg-accent text-accent-foreground hover:bg-accent/90 rounded-full font-bold py-6 px-8 text-base">
-              Talk to our Meta expert
+              {language === 'ar' ? 'تحدث إلى خبيرنا في ميتا' : 'Talk to our Meta expert'}
               <MessageCircle className="ml-2"/>
             </Button>
           </Link>

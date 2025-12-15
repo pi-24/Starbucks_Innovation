@@ -5,53 +5,63 @@ import { motion, useMotionValue } from 'framer-motion';
 
 const layersData = {
   foam: {
+    en: 'Foam',
+    ar: 'رغوة',
     options: [
-      { name: 'No Foam', color: '#f7f3ec' },
-      { name: 'Cold Foam', color: '#ffffff' },
-      { name: 'Vanilla Sweet Cream Foam', color: '#f3e5ab' },
-      { name: 'Chocolate Cream Foam', color: '#5a3a2e' },
-      { name: 'Whipped Cream', color: '#fffdf7' },
+      { en: 'No Foam', ar: 'بدون رغوة', color: '#f7f3ec' },
+      { en: 'Cold Foam', ar: 'رغوة باردة', color: '#ffffff' },
+      { en: 'Vanilla Sweet Cream Foam', ar: 'رغوة كريمة الفانيليا الحلوة', color: '#f3e5ab' },
+      { en: 'Chocolate Cream Foam', ar: 'رغوة كريمة الشوكولاتة', color: '#5a3a2e' },
+      { en: 'Whipped Cream', ar: 'كريمة مخفوقة', color: '#fffdf7' },
     ],
   },
   ice: {
+    en: 'Ice',
+    ar: 'ثلج',
     options: [
-      { name: 'No Ice', color: '#f7f3ec' },
-      { name: 'Light Ice', color: 'rgba(200,230,255,0.6)' },
-      { name: 'Regular Ice', color: 'rgba(180,220,255,0.8)' },
-      { name: 'Extra Ice', color: 'rgba(160,210,255,0.9)' },
+      { en: 'No Ice', ar: 'بدون ثلج', color: '#f7f3ec' },
+      { en: 'Light Ice', ar: 'ثلج قليل', color: 'rgba(200,230,255,0.6)' },
+      { en: 'Regular Ice', ar: 'ثلج عادي', color: 'rgba(180,220,255,0.8)' },
+      { en: 'Extra Ice', ar: 'ثلج إضافي', color: 'rgba(160,210,255,0.9)' },
     ],
   },
   milk: {
+    en: 'Milk',
+    ar: 'حليب',
     options: [
-      { name: 'Whole Milk', color: '#ffffff' },
-      { name: 'Low-Fat Milk', color: '#f7f7f7' },
-      { name: 'Skim Milk', color: '#fcfcfc' },
-      { name: 'Oat Milk', color: '#e6d3a3' },
-      { name: 'Almond Milk', color: '#f0ead6' },
-      { name: 'Soy Milk', color: '#efe6d8' },
-      { name: 'Coconut Milk', color: '#fafafa' },
+      { en: 'Whole Milk', ar: 'حليب كامل الدسم', color: '#ffffff' },
+      { en: 'Low-Fat Milk', ar: 'حليب قليل الدسم', color: '#f7f7f7' },
+      { en: 'Skim Milk', ar: 'حليب خالي الدسم', color: '#fcfcfc' },
+      { en: 'Oat Milk', ar: 'حليب الشوفان', color: '#e6d3a3' },
+      { en: 'Almond Milk', ar: 'حليب اللوز', color: '#f0ead6' },
+      { en: 'Soy Milk', ar: 'حليب الصويا', color: '#efe6d8' },
+      { en: 'Coconut Milk', ar: 'حليب جوز الهند', color: '#fafafa' },
     ],
   },
   base: {
+    en: 'Base',
+    ar: 'الأساس',
     options: [
-      { name: 'Espresso', color: '#3b1f1f' },
-      { name: 'Blonde Espresso', color: '#a47148' },
-      { name: 'Matcha', color: '#6aa84f' },
-      { name: 'Coffee', color: '#4b2e2b' },
-      { name: 'Crème Base', color: '#f5f5f5' },
+      { en: 'Espresso', ar: 'اسبريسو', color: '#3b1f1f' },
+      { en: 'Blonde Espresso', ar: 'اسبريسو أشقر', color: '#a47148' },
+      { en: 'Matcha', ar: 'ماتشا', color: '#6aa84f' },
+      { en: 'Coffee', ar: 'قهوة', color: '#4b2e2b' },
+      { en: 'Crème Base', ar: 'قاعدة كريمية', color: '#f5f5f5' },
     ],
   },
   syrup: {
+    en: 'Syrup',
+    ar: 'شراب',
     options: [
-      { name: 'No Syrup', color: '#f2e9dc' },
-      { name: 'Vanilla', color: '#f3e5ab' },
-      { name: 'Caramel', color: '#c68642' },
-      { name: 'White Mocha', color: '#e6d8ad' },
-      { name: 'Hazelnut', color: '#b08968' },
-      { name: 'Toffee Nut', color: '#a86b3c' },
-      { name: 'Cinnamon Dolce', color: '#cfa670' },
-      { name: 'Strawberry Purée', color: '#d94a4a' },
-      { name: 'Pistachio (Seasonal)', color: '#93c47d' },
+      { en: 'No Syrup', ar: 'بدون شراب', color: '#f2e9dc' },
+      { en: 'Vanilla', ar: 'فانيليا', color: '#f3e5ab' },
+      { en: 'Caramel', ar: 'كراميل', color: '#c68642' },
+      { en: 'White Mocha', ar: 'موكا بيضاء', color: '#e6d8ad' },
+      { en: 'Hazelnut', ar: 'بندق', color: '#b08968' },
+      { en: 'Toffee Nut', ar: 'جوز التوفي', color: '#a86b3c' },
+      { en: 'Cinnamon Dolce', ar: 'قرفة دولتشي', color: '#cfa670' },
+      { en: 'Strawberry Purée', ar: 'هريس الفراولة', color: '#d94a4a' },
+      { en: 'Pistachio (Seasonal)', ar: 'فستق (موسمي)', color: '#93c47d' },
     ],
   },
 };
@@ -62,15 +72,16 @@ interface CustomizerLayerProps {
   layerKey: LayerKey;
   index: number;
   onIndexChange: (newIndex: number) => void;
+  language: 'en' | 'ar';
 }
 
-const CustomizerLayer: React.FC<CustomizerLayerProps> = ({ layerKey, index, onIndexChange }) => {
-  const { options } = layersData[layerKey];
-  const option = options[index];
+const CustomizerLayer: React.FC<CustomizerLayerProps> = ({ layerKey, index, onIndexChange, language }) => {
+  const layerInfo = layersData[layerKey];
+  const option = layerInfo.options[index];
 
   const handleArrowClick = (dir: 'left' | 'right') => {
     let newIndex = dir === 'left' ? index - 1 : index + 1;
-    newIndex = (newIndex + options.length) % options.length;
+    newIndex = (newIndex + layerInfo.options.length) % layerInfo.options.length;
     onIndexChange(newIndex);
   };
   
@@ -100,9 +111,9 @@ const CustomizerLayer: React.FC<CustomizerLayerProps> = ({ layerKey, index, onIn
     >
       <div className="text-2xl cursor-pointer opacity-75 hover:opacity-100" onClick={() => handleArrowClick('left')}>◀</div>
       <div className="text-center">
-        {option.name}
+        {option[language]}
         <br />
-        <span className="text-xs opacity-80">{layerKey.toUpperCase()}</span>
+        <span className="text-xs opacity-80">{layerInfo[language].toUpperCase()}</span>
       </div>
       <div className="text-2xl cursor-pointer opacity-75 hover:opacity-100" onClick={() => handleArrowClick('right')}>▶</div>
     </motion.div>
@@ -110,7 +121,7 @@ const CustomizerLayer: React.FC<CustomizerLayerProps> = ({ layerKey, index, onIn
 };
 
 
-export default function DrinkCustomizer() {
+export default function DrinkCustomizer({ language }: { language: 'en' | 'ar' }) {
   const [selections, setSelections] = useState({
     foam: 0,
     ice: 0,
@@ -127,7 +138,7 @@ export default function DrinkCustomizer() {
     <div className="flex justify-center items-center">
       <div className="w-[300px] bg-[#f7f3ec] rounded-b-[45px] overflow-hidden shadow-2xl">
         <div className="text-center font-bold p-[14px]">
-          Customize Your Drink
+          {language === 'ar' ? 'خصص مشروبك' : 'Customize Your Drink'}
         </div>
 
         {(Object.keys(layersData) as LayerKey[]).map((key) => (
@@ -136,11 +147,12 @@ export default function DrinkCustomizer() {
             layerKey={key}
             index={selections[key]}
             onIndexChange={(newIndex) => handleIndexChange(key, newIndex)}
+            language={language}
           />
         ))}
 
         <div className="text-center text-xs p-[10px] bg-black/5">
-          Swipe left / right or tap arrows
+          {language === 'ar' ? 'اسحب لليسار / لليمين أو اضغط على الأسهم' : 'Swipe left / right or tap arrows'}
         </div>
       </div>
     </div>
